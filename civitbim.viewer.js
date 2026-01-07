@@ -4,7 +4,7 @@ var CivitBim = {};
 
 function LoadAutodeskLibrary(callback) {
     var script = document.createElement('script');
-    script.src = 'https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.js';
+    script.src = 'https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js';
     script.onload = function () {
         callback();
     };
