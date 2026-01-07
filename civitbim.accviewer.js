@@ -24,6 +24,7 @@ CivitBim.Viewer = (function () {
                 var options = {
                     env: 'AutodeskProduction',
                     api: 'streamingV2', // ✅ REQUIRED FOR ACC MODELS
+                    region: 'EMEA',      // ← REQUIRED for acc.ind.autodesk.com
                     getAccessToken: accessToken
                 };
 
