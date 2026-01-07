@@ -69,6 +69,3 @@ CivitBim.Viewer = (function () {
 
     return viewer;
 })();
-avatar
-Ask In Chat
-Ask In Chat
