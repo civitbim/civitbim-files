@@ -42,30 +42,38 @@ CivitBim.Viewer = (function () {
         });
     };
 
-    viewer.Load = async function (viewer, urn) {
-        return new Promise(function (resolve, reject) {
+    viewer.Load = async function (viewer, urn, options = {}) {
+    return new Promise(function (resolve, reject) {
 
-            function onDocumentLoadSuccess(doc) {
-                resolve(
-                    viewer.loadDocumentNode(
-                        doc,
-                        doc.getRoot().getDefaultGeometry(true)
-                    )
-                );
+        function onDocumentLoadSuccess(doc) {
+            const defaultModel = doc.getRoot().getDefaultGeometry(true);
+            if (!defaultModel) {
+                reject({
+                    code: -1,
+                    message: "No default geometry found in document"
+                });
+                return;
             }
 
-            function onDocumentLoadFailure(code, message, errors) {
-                reject({ code, message, errors });
-            }
+            viewer.loadDocumentNode(
+                doc,
+                defaultModel,
+                options   // 👈 THIS is the key (keepCurrentModels)
+            ).then(resolve).catch(reject);
+        }
 
-            viewer.setLightPreset(0);
-            Autodesk.Viewing.Document.load(
-                'urn:' + urn,
-                onDocumentLoadSuccess,
-                onDocumentLoadFailure
-            );
-        });
-    };
+        function onDocumentLoadFailure(code, message, errors) {
+            reject({ code, message, errors });
+        }
 
+        viewer.setLightPreset(0);
+
+        Autodesk.Viewing.Document.load(
+            'urn:' + urn,
+            onDocumentLoadSuccess,
+            onDocumentLoadFailure
+        );
+    });
+};
     return viewer;
 })();
