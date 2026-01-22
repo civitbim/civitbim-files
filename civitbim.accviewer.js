@@ -6,8 +6,10 @@ function LoadAutodeskLibrary(callback) {
     var script = document.createElement('script');
     script.src = 'https://developer.api.autodesk.com/viewingservice/v1/viewers/7.*/viewer3D.js';
     script.onload = function () {
-        callback();
-    };
+    Autodesk.Viewing.FeatureFlags.set("DS_ENDPOINTS", true);
+    callback();
+};
+
     script.onerror = function () {
         console.error('Failed to load Autodesk Viewer script.');
     };
@@ -16,7 +18,6 @@ function LoadAutodeskLibrary(callback) {
 
 CivitBim.Viewer = (function () {
     var viewer = {};
-
     viewer.Initialize = async function (container, accessToken) {
         return new Promise(function (resolve, reject) {
             LoadAutodeskLibrary(function () {
