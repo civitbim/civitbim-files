@@ -46,7 +46,8 @@ CivitBim.Viewer = (function () {
         if (!options) options = {};
         return new Promise(function (resolve, reject) {
             function onDocumentLoadSuccess(doc) {
-                var defaultModel = doc.getRoot().getDefaultGeometry(true);
+                var views3d = doc.getRoot().search({ type: "geometry", role: "3d" });
+                var defaultModel = views3d[0] || doc.getRoot().getDefaultGeometry(true);
                 if (!defaultModel) {
                     reject({ code: -1, message: "No default geometry found in document" });
                     return;
