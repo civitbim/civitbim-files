@@ -1,15 +1,23 @@
 // CivitBim.viewer.js
 var CivitBim = {};
-function LoadAutodeskLibrary(callback) {
+function LoadAutodeskLibrary(callback, reject) {
+    if (window.Autodesk && Autodesk.Viewing) {
+        callback();
+        return;
+    }
+
     var script = document.createElement('script');
     script.src = 'https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.js';
+
     script.onload = function () {
         Autodesk.Viewing.FeatureFlags.set("DS_ENDPOINTS", true);
         callback();
     };
+
     script.onerror = function () {
-        console.error('Failed to load Autodesk Viewer script.');
+        reject(new Error('Failed to load Autodesk Viewer script.'));
     };
+
     document.head.appendChild(script);
 }
 CivitBim.Viewer = (function () {
